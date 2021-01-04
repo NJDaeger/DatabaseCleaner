@@ -335,8 +335,6 @@ public class Main {
         XSSFSheet pcInfo = parent.getSheet("PC_Info");
         XSSFWorkbook pcWorkbook = new XSSFWorkbook();
         XSSFSheet pcSheet = pcWorkbook.createSheet("PC_Sheet");
-        XSSFSheet hardwareSheet = parent.getSheet("Hardware");
-        XSSFSheet distinctHardwareSheet = parent.getSheet("Distinct_Hardware");
         XSSFRow titleRow = pcSheet.createRow(0);
         titleRow.createCell(0).setCellValue("PC_Num");      //PC_Num
         titleRow.createCell(1).setCellValue("Owner_Type");  //Determine from the username
@@ -364,7 +362,7 @@ public class Main {
             String ownedBy = "";
             String location = "";
             String model = "";
-            String cpu = "";
+            String cpu = ""; //Note, we are no longer using access to grab the os/cpu/and ram
             String ram = "";
             String os = "";
             String assetNum = "";
@@ -414,13 +412,9 @@ public class Main {
                 ownedBy = row.getCell(5).getStringCellValue();
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
             }
-    
-            String[] hardware = getHardware(hardwareSheet, distinctHardwareSheet, pcNum);
             
             model = row.getCell(1).getStringCellValue();
-            os = hardware[0];
-            ram = hardware[1].isEmpty() ? "" : hardware[1] + "Mb";
-            cpu = hardware[2];
+
             //cpu
             //ram = getRam(row.getCell(8).getStringCellValue());
             //os
