@@ -352,6 +352,7 @@ public class Main {
         titleRow.createCell(13).setCellValue("Special_Software");//Special_Software
         titleRow.createCell(14).setCellValue("Comment");    //Comments
         titleRow.createCell(15).setCellValue("Warranty_Expiration");//Warranty_Expiration
+        titleRow.createCell(16).setCellValue("Work_From_Home");//Warranty_Expiration
     
         int rows = pcInfo.getLastRowNum();
         
@@ -373,7 +374,8 @@ public class Main {
             String specialSoftware = "";
             String comment = "";
             String warrantyExpiration = "";
-        
+            String workFromHome = "false";
+
             XSSFRow newRow = pcSheet.createRow(pcSheet.getLastRowNum() + 1);
         
             pcNum = row.getCell(0).getStringCellValue();
@@ -389,27 +391,51 @@ public class Main {
                 location = "";
             } else if (typeCell.toLowerCase().contains("room")) {
                 ownedBy = normalizeUsernameString(row.getCell(5).getStringCellValue());
+                if (ownedBy.toLowerCase().contains("wfh")) {
+                    ownedBy = ownedBy.replace("wfh", "");
+                    workFromHome = "true";
+                }
                 ownerType = "Room";
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
             } else if (typeCell.toLowerCase().contains("office")) {
                 ownerType = "User";
                 ownedBy = row.getCell(5).getStringCellValue().toLowerCase();
+                if (ownedBy.toLowerCase().contains("wfh")) {
+                    ownedBy = ownedBy.replace("wfh", "");
+                    workFromHome = "true";
+                }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
             } else if (typeCell.toLowerCase().contains("pool")) {
                 ownerType = "Pool PC";
                 ownedBy = row.getCell(5).getStringCellValue();
+                if (ownedBy.toLowerCase().contains("wfh")) {
+                    ownedBy = ownedBy.replace("wfh", "");
+                    workFromHome = "true";
+                }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
             } else if (typeCell.toLowerCase().contains("field")) {
                 ownerType = "Field";
                 ownedBy = row.getCell(5).getStringCellValue();
+                if (ownedBy.toLowerCase().contains("wfh")) {
+                    ownedBy = ownedBy.replace("wfh", "");
+                    workFromHome = "true";
+                }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
             } else if (typeCell.toLowerCase().contains("teleco")) {
                 ownerType = "Telecommuter";
                 ownedBy = row.getCell(5).getStringCellValue();
+                if (ownedBy.toLowerCase().contains("wfh")) {
+                    ownedBy = ownedBy.replace("wfh", "");
+                    workFromHome = "true";
+                }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
             } else {
                 ownerType = "Other";
                 ownedBy = row.getCell(5).getStringCellValue();
+                if (ownedBy.toLowerCase().contains("wfh")) {
+                    ownedBy = ownedBy.replace("wfh", "");
+                    workFromHome = "true";
+                }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
             }
             
@@ -449,6 +475,7 @@ public class Main {
             newRow.createCell(13).setCellValue(specialSoftware);
             newRow.createCell(14).setCellValue(comment);
             newRow.createCell(15).setCellValue(warrantyExpiration);
+            newRow.createCell(16).setCellValue(workFromHome);
     
             if (row.getRowNum() % 8 == 0 || row.getRowNum() == rows) System.out.printf("%.2f%% complete.\n", (row.getRowNum() / (double)rows) * 100);
             
@@ -535,7 +562,8 @@ public class Main {
         phoneTitle.createCell(6).setCellValue("FAS_Date_Added");
         phoneTitle.createCell(7).setCellValue("Model");
         phoneTitle.createCell(8).setCellValue("Comment");
-    
+        phoneTitle.createCell(9).setCellValue("Work_From_Home");
+
         XSSFWorkbook hardwareWorkbook = new XSSFWorkbook();
         XSSFSheet hardwareSheet = hardwareWorkbook.createSheet("Hardware");
         XSSFRow hardwareTitle = hardwareSheet.createRow(0);
@@ -548,6 +576,7 @@ public class Main {
         hardwareTitle.createCell(6).setCellValue("FAS_Date_Added");
         hardwareTitle.createCell(7).setCellValue("Model");
         hardwareTitle.createCell(8).setCellValue("Comment");
+        hardwareTitle.createCell(8).setCellValue("Work_From_Home");
         
         additionalHardware.forEach(row -> {
             //The "CellPhoneInfo" column is always full when an item is a cell phone. (Note: few mismatches)
@@ -580,7 +609,9 @@ public class Main {
     
             //Comment will help determine the location and ownedBy characteristics
             String comment;
-    
+
+            String workFromHome = "false";
+
             //PCNum is the same for both phones and hardware
             //covers owner_type, owned_by, and location.
             String pcNumCell = row.getCell(0).getStringCellValue();
@@ -594,6 +625,7 @@ public class Main {
                 ownedBy = "DEPARTMENT";
             } else {
                 ownedBy = lookupUsername(pcInfo, pcNumCell).toLowerCase();
+                if (ownedBy.toLowerCase().contains("wfh")) workFromHome = "true";
                 if (ownedBy.toLowerCase().contains("room")) ownerType = "Room";
                 else ownerType = "User";
                 location = lookupLocation(userInfo, ownedBy).toUpperCase();
@@ -630,6 +662,7 @@ public class Main {
                 newRow.createCell(6).setCellValue(dateAdded);
                 newRow.createCell(7).setCellValue(model);
                 newRow.createCell(8).setCellValue(comment);
+                newRow.createCell(9).setCellValue(workFromHome);
             } else {
                 //Create a new row after the most recent one
                 if (assetNum.toLowerCase().contains("nofas") || assetNum.toLowerCase().contains("n/a") || assetNum.toLowerCase().contains("noasset") || assetNum.toLowerCase().contains("not on fas")) assetNum = "";
@@ -650,6 +683,7 @@ public class Main {
                 newRow.createCell(6).setCellValue(dateAdded);
                 newRow.createCell(7).setCellValue(model);
                 newRow.createCell(8).setCellValue(comment);
+                newRow.createCell(9).setCellValue(workFromHome);
                 
                 if (!models.contains(model.toLowerCase())) {
                     models.add(model.toLowerCase());
