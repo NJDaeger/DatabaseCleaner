@@ -392,7 +392,7 @@ public class Main {
             } else if (typeCell.toLowerCase().contains("room")) {
                 ownedBy = normalizeUsernameString(row.getCell(5).getStringCellValue());
                 if (ownedBy.toLowerCase().contains("wfh")) {
-                    ownedBy = ownedBy.replace("wfh", "");
+                    ownedBy = normalizeUsernameString(ownedBy.toLowerCase().replace("wfh", ""));
                     workFromHome = "true";
                 }
                 ownerType = "Room";
@@ -401,7 +401,7 @@ public class Main {
                 ownerType = "User";
                 ownedBy = row.getCell(5).getStringCellValue().toLowerCase();
                 if (ownedBy.toLowerCase().contains("wfh")) {
-                    ownedBy = ownedBy.replace("wfh", "");
+                    ownedBy = normalizeUsernameString(ownedBy.toLowerCase().replace("wfh", ""));
                     workFromHome = "true";
                 }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
@@ -409,7 +409,7 @@ public class Main {
                 ownerType = "Pool PC";
                 ownedBy = row.getCell(5).getStringCellValue();
                 if (ownedBy.toLowerCase().contains("wfh")) {
-                    ownedBy = ownedBy.replace("wfh", "");
+                    ownedBy = normalizeUsernameString(ownedBy.toLowerCase().replace("wfh", ""));
                     workFromHome = "true";
                 }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
@@ -417,7 +417,7 @@ public class Main {
                 ownerType = "Field";
                 ownedBy = row.getCell(5).getStringCellValue();
                 if (ownedBy.toLowerCase().contains("wfh")) {
-                    ownedBy = ownedBy.replace("wfh", "");
+                    ownedBy = normalizeUsernameString(ownedBy.toLowerCase().replace("wfh", ""));
                     workFromHome = "true";
                 }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
@@ -425,7 +425,7 @@ public class Main {
                 ownerType = "Telecommuter";
                 ownedBy = row.getCell(5).getStringCellValue();
                 if (ownedBy.toLowerCase().contains("wfh")) {
-                    ownedBy = ownedBy.replace("wfh", "");
+                    ownedBy = normalizeUsernameString(ownedBy.toLowerCase().replace("wfh", ""));
                     workFromHome = "true";
                 }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
@@ -433,7 +433,7 @@ public class Main {
                 ownerType = "Other";
                 ownedBy = row.getCell(5).getStringCellValue();
                 if (ownedBy.toLowerCase().contains("wfh")) {
-                    ownedBy = ownedBy.replace("wfh", "");
+                    ownedBy = normalizeUsernameString(ownedBy.toLowerCase().replace("wfh", ""));
                     workFromHome = "true";
                 }
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
@@ -625,7 +625,10 @@ public class Main {
                 ownedBy = "DEPARTMENT";
             } else {
                 ownedBy = lookupUsername(pcInfo, pcNumCell).toLowerCase();
-                if (ownedBy.toLowerCase().contains("wfh")) workFromHome = "true";
+                if (ownedBy.toLowerCase().contains("wfh")) {
+                    ownedBy = normalizeUsernameString(ownedBy.toLowerCase().replace("wfh", ""));
+                    workFromHome = "true";
+                }
                 if (ownedBy.toLowerCase().contains("room")) ownerType = "Room";
                 else ownerType = "User";
                 location = lookupLocation(userInfo, ownedBy).toUpperCase();
