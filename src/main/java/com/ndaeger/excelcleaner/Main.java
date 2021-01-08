@@ -336,14 +336,20 @@ public class Main {
         XSSFWorkbook pcWorkbook = new XSSFWorkbook();
         XSSFSheet pcSheet = pcWorkbook.createSheet("PC_Sheet");
         XSSFRow titleRow = pcSheet.createRow(0);
+
+        /*
+
+        These are the title rows for the PC Database. You can change the names of these columns as you wish and it will not hurt anything. HOWEVER, changing the column index will cause errors to happen.
+
+         */
         titleRow.createCell(0).setCellValue("PC_Num");      //PC_Num
-        titleRow.createCell(1).setCellValue("Owner_Type");  //Determine from the username
-        titleRow.createCell(2).setCellValue("Owned_By");    //Should just be Username
-        titleRow.createCell(3).setCellValue("Location");    //Location
+        titleRow.createCell(1).setCellValue("Owner_Type");  //The owner type of the PC
+        titleRow.createCell(2).setCellValue("Owned_By");    //The username of the user who owns this PC
+        titleRow.createCell(3).setCellValue("Reporting_Office"); //The office this user reports to
         titleRow.createCell(4).setCellValue("Model");       //PC_Model
-        titleRow.createCell(5).setCellValue("CPU");         //Unable
-        titleRow.createCell(6).setCellValue("RAM");         //Check comments or Prev_User
-        titleRow.createCell(7).setCellValue("OS");          //Unable
+        titleRow.createCell(5).setCellValue("CPU");         //Unused
+        titleRow.createCell(6).setCellValue("RAM");         //Unused
+        titleRow.createCell(7).setCellValue("OS");          //Unused
         titleRow.createCell(8).setCellValue("Asset_Num");   //Asset_Num
         titleRow.createCell(9).setCellValue("Serial_Num");  //Serial_Num
         titleRow.createCell(10).setCellValue("PO_Num");     //PO_Num
@@ -379,7 +385,10 @@ public class Main {
             XSSFRow newRow = pcSheet.createRow(pcSheet.getLastRowNum() + 1);
         
             pcNum = row.getCell(0).getStringCellValue();
-        
+
+            /*
+            This block of code is figuring out the location, the owner type, the owner, and work from home fields.
+             */
             String typeCell = row.getCell(6).getStringCellValue();
             if (typeCell.toLowerCase().contains("stock")) {
                 location = getLocationFromString(row.getCell(7).getStringCellValue().toLowerCase());
